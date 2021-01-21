@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hexo个人博客搭建-基础篇</title>
+    <url>/2019/10/10/Hexo%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA-%E5%9F%BA%E7%A1%80%E7%AF%87/</url>
+    <content><![CDATA[<h2 id="Hexo个人博客搭建-基础篇"><a href="#Hexo个人博客搭建-基础篇" class="headerlink" title="Hexo个人博客搭建(基础篇)"></a>Hexo个人博客搭建(基础篇)</h2><h3 id="1-环境准备"><a href="#1-环境准备" class="headerlink" title="1. 环境准备"></a>1. 环境准备</h3><p>hexo个人博客可以在Windows,Linux,Mac等环境下搭建,依据个人情况选择,以下示例均在ArchLinux环境下进行</p>
+<p>环境:Git,Node.js,cnpm(此包管理器可不安装,国内网速较慢,建议使用).</p>
+<p>Git:<a href="https://git-scm.com/">官网下载</a></p>
+<p>archlinux用户可使用以下命令直接安装:</p>
+<p><code>sudo pacman -S git</code></p>
+<p>Node.js:<a href="https://nodejs.org/en/">官网下载</a></p>
+<p>archlinux用户可使用以下命令直接安装:</p>
+<p><code>sudo pacman -S nodejs</code></p>
+<p>cnpm使用以下命令安装:</p>
+<p><code>npm install -g cnpm --registry=https://registry.npm.taobao.org</code></p>
+<a id="more"></a>
+
+<hr>
+<h3 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h3><p>使用cnpm安装hexo框架:</p>
+<p><code>cnpm install hexo-cli</code></p>
+<p>安装检查:</p>
+<p><code>hexo -v</code></p>
+<p>以下为安装成功状态:</p>
+<p>​    <img src="https://i.loli.net/2019/10/10/bd7ykjKiZC1ITPD.png" alt="hexo安装检查.png" style="zoom:50%;" /></p>
+<hr>
+<h3 id="3-初始化"><a href="#3-初始化" class="headerlink" title="3. 初始化"></a>3. 初始化</h3><p>新建一个文件夹,名称随意,此文件夹用于存放hexo博客文件,后续操作均在此文件夹中进行:</p>
+<p><code>mkdir myblog</code></p>
+<p>进入此文件夹:</p>
+<p><code>cd myblog</code></p>
+<p>初始化hexo博客:</p>
+<p><code>sudo hexo init</code></p>
+<p>此过程可能较慢,请耐心等待</p>
+<p>初始化成功提示:</p>
+<p>​    <img src="https://i.loli.net/2019/10/10/2fjorzW8JOQ5Cy4.png" alt="hexo初始化检查.png" style="zoom:60%;" /></p>
+<hr>
+<h3 id="4-启动"><a href="#4-启动" class="headerlink" title="4. 启动"></a>4. 启动</h3><p>启动hexo博客只需简单的一条命令:</p>
+<p><code>hexo s</code></p>
+<p>提示:</p>
+<p>​    <img src="https://i.loli.net/2019/10/10/QdHyvZPDOskMb1U.png" alt="hexo启动检查.png" style="zoom:50%;" /></p>
+<p>按提示在浏览器中输入<a href="http://localhost:4000浏览网站">http://localhost:4000浏览网站</a>:    </p>
+<p><img src="https://i.loli.net/2019/10/10/yGhYvsmMFRKxWPb.png" alt="hexo启动预览.png"></p>
+<hr>
+<h3 id="5-将网站推送到github"><a href="#5-将网站推送到github" class="headerlink" title="5. 将网站推送到github"></a>5. 将网站推送到github</h3><p>安装hexo推送工具:</p>
+<p><code>cnpm install --save hexo-deployer-git</code></p>
+<p>新建一个github仓库,注意仓库名格式为:<strong>github昵称.github.io</strong>(此步非常重要!!!)</p>
+<p>​    <img src="https://i.loli.net/2019/10/10/oFXVx5lEphg3D9y.png" alt="新建github仓库.png" style="zoom:50%;" /></p>
+<p>修改配置文件:</p>
+<p><code>vim _config.yml</code></p>
+<p>找到# Depolyment字段:</p>
+<p>​    <img src="https://i.loli.net/2019/10/10/GRig1Bs7CEprWw2.png" alt="推送设置.png" style="zoom:70%;" /></p>
+<p>在repo字段后填入仓库地址,branch字段可为空,默认分支为master</p>
+<p>推送命令:</p>
+<p><code>hexo d</code></p>
+<p>输入github账号和密码,推送成功</p>
+<p>至此,一个基础版的hexo个人博客就部署完成了,可以通过设置的仓库名称进行访问!</p>
+<h3 id="6-总结"><a href="#6-总结" class="headerlink" title="6.总结"></a>6.总结</h3><p>hexo博客属于静态博客,所有数据均以本地文件的形式进行管理,非常适合刚刚接触博客网站的朋友,</p>
+<p>其搭建过程非常简单,且在各个系统平台下均可使用,本文中搭建的是一个最基础的hexo博客,后续可以</p>
+<p>通过修改博客主题和添加功能页面的方式使你的博客更加美观,功能更加丰富.</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ArchLinux安装-基础篇</title>
+    <url>/2019/10/11/ArchLinux%E5%AE%89%E8%A3%85-%E5%9F%BA%E7%A1%80%E7%AF%87/</url>
+    <content><![CDATA[<h2 id="ArchLinux安装-基础篇"><a href="#ArchLinux安装-基础篇" class="headerlink" title="ArchLinux安装-基础篇"></a>ArchLinux安装-基础篇</h2><h3 id="1-ArchLinux介绍"><a href="#1-ArchLinux介绍" class="headerlink" title="1. ArchLinux介绍"></a>1. ArchLinux介绍</h3><p><strong>Arch Linux</strong> 是一款基于 <strong>x86-64</strong> 架构的 <strong>Linux</strong> 发行版。系统主要由<strong>自由</strong>和<strong>开源软件</strong>组成，支持社区参与。系统设计以<strong>KISS原则</strong>（保持简单和愚蠢）为总体指导原则，注重代码正确、优雅和极简主义，期待用户能够愿意去理解系统的操作。 <strong>Arch Linux</strong> 系统安装、删除和更新软件的软件包管理器叫做<strong>pacman</strong></p>
+<p><strong>Arch Linux</strong> 采用<strong>滚动发行</strong>模式来获取系统更新和软件的最新版本。系统安装映像只简单地包含系统主要组件。</p>
+<p><strong>Arch Linux</strong> 以社区Wiki的形式提供文档，称为 <a href="https://wiki.archlinux.org/">ArchWiki</a> 。该 Wiki 经常编有特定主题的最新信息，受到了 Linux 社区的广泛认可，内容也应用在 <strong>Arch Linux</strong> 以外的领域。</p>
+<a id="more"></a>
+
+<h3 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h3><h4 id="2-1-预留磁盘空间"><a href="#2-1-预留磁盘空间" class="headerlink" title="2.1 预留磁盘空间"></a>2.1 预留磁盘空间</h4><p>请确保磁盘中有一块未分配空间,以便<strong>ArchlLinux</strong>系统安装</p>
+<h4 id="2-2-制作启动盘"><a href="#2-2-制作启动盘" class="headerlink" title="2.2 制作启动盘"></a>2.2 制作启动盘</h4><p>进入<a href="https://mirrors.tuna.tsinghua.edu.cn/archlinux/iso/">ArchLinux镜像下载网站</a>(此处使用清华镜像源)</p>
+<p>制作工具:<a href="https://sourceforge.net/projects/usbwriter/">USBWrite</a></p>
+<h4 id="2-3进入启动盘"><a href="#2-3进入启动盘" class="headerlink" title="2.3进入启动盘"></a>2.3进入启动盘</h4><p>​        <img src="https://i.loli.net/2019/10/11/3RelTyMsHVq5WYk.png" alt="archlinux启动选项.png" style="zoom:50%;" /></p>
+<p>​        选择第一项回车进入</p>
+<h4 id="2-4-检查启动模式"><a href="#2-4-检查启动模式" class="headerlink" title="2.4 检查启动模式"></a>2.4 检查启动模式</h4><p><code>ls /sys/firmware/efi/efivars</code></p>
+<p>若输出信息则为<strong>UEFI</strong>启动模式,否则为<strong>BIOS</strong>模式</p>
+<h4 id="2-5-连接网络"><a href="#2-5-连接网络" class="headerlink" title="2.5 连接网络"></a>2.5 连接网络</h4><p>有线网络连接:</p>
+<p><code>dhcpcd</code></p>
+<p>无线网络连接:</p>
+<p><code>wifi-menu</code>        </p>
+<p>检查连接:</p>
+<p><code>ping www.baidu.com</code></p>
+<h4 id="2-6-同步时间"><a href="#2-6-同步时间" class="headerlink" title="2.6 同步时间"></a>2.6 同步时间</h4><p><code>timedatectl set-ntp true</code></p>
+<p>此步骤正常情况下无信息输出(有时候没有消息就是最好的消息)</p>
+<h4 id="2-7-硬盘分区"><a href="#2-7-硬盘分区" class="headerlink" title="2.7 硬盘分区"></a>2.7 硬盘分区</h4><p>进入<strong>cfdisk</strong>分区工具,此工具为图形化分区工具,适合新手使用</p>
+<p><code>cfdisk</code></p>
+<p>选择<strong>gpt</strong>回车</p>
+<p>​        <img src="https://i.loli.net/2019/10/11/2FPNresHx6lkYZb.png" alt="cfdisk工具页面.png" style="zoom:50%;" /></p>
+<p>选择<strong>Free space</strong>,然后<strong>New</strong>,输入空间大小</p>
+<p><strong>BIOS</strong>用户只需分配一个主空间即可,如下图:</p>
+<p>​        <img src="https://i.loli.net/2019/10/11/OfLHtYFlMPGsWpq.png" alt="磁盘分配-BIOS用户.png" style="zoom:50%;" /></p>
+<p>选择<strong>Write</strong>后,输入<strong>yes</strong>保存磁盘分区方案</p>
+<p><strong>UEFI</strong>用户需要分配两个空间,一个是<strong>EFI</strong>空间(200M就行,若已有EFI空间则不用分配)</p>
+<p>另一个则是<strong>系统主空间</strong>,将余下的空闲空间全部分配给它,如下图:</p>
+<p>​        <img src="https://i.loli.net/2019/10/11/sLdpEbmPFehTiYN.png" alt="磁盘分配-EFI用户.png" style="zoom:50%;" /></p>
+<p>记住分区信息(/dev/sda1等,后续挂载放分区需要),保存分区方案</p>
+<p>检查分区信息:</p>
+<p><code>fdisk -l</code></p>
+<p>​        <img src="https://i.loli.net/2019/10/11/LqfTcDp6CzxlY5Z.png" alt="磁盘分区信息检查.png" style="zoom:50%;" /></p>
+<h4 id="2-8-格式化分区"><a href="#2-8-格式化分区" class="headerlink" title="2.8 格式化分区"></a>2.8 格式化分区</h4><p>以上面步骤为例.<strong>BIOS</strong>用户只需以<strong>ext4</strong>文件系统格式化主分区即可:</p>
+<p><code>mkfs.ext4 /dev/sda1</code></p>
+<p><strong>UEFI</strong>用户则需以<strong>fat32</strong>文件系统格式化<strong>EFI</strong>分区(若存在EFI分区,则不用格式化),以<strong>ext4</strong>文件系统格式化主分区:</p>
+<p><code>mkfs.fat -F32 /dev/sda1</code></p>
+<p><code>mkfs.ext4 /dev/sda2</code></p>
+<h4 id="2-9-挂载分区"><a href="#2-9-挂载分区" class="headerlink" title="2.9 挂载分区"></a>2.9 挂载分区</h4><p><strong>BIOS</strong>用户只需挂载主分区即可:</p>
+<p><code>mount /dev/sda1 /mnt</code></p>
+<p><strong>UEFI</strong>用户在挂载主分区的同时需挂载<strong>EFI</strong>分区(若存在EFI分区,则将第三步中的分区信息换成现有EFI分区信息)</p>
+<p><code>mount /dev/sda2 /mnt</code></p>
+<p><code>mkdir -p /mnt/boot/efi</code>        </p>
+<p><code>mount /dev/sda1 /mnt/boot/efi</code></p>
+<h4 id="2-10-配置源"><a href="#2-10-配置源" class="headerlink" title="2.10 配置源"></a>2.10 配置源</h4><p>因默认源在国内下载速度较慢,所以需要加入<strong>国内源</strong></p>
+<p>打开源配置文件:</p>
+<p><code>vim /etc/pacman.d/mirrorlist</code></p>
+<p>在前面加入<strong>国内源</strong>,此处使用<a href="https://mirrors.tuna.tsinghua.edu.cn/help/archlinux/">清华源镜像源</a>,如下:</p>
+<p>​        <img src="https://i.loli.net/2019/10/11/zCbWLnjQFJvsu9R.png" alt="修改源.png" style="zoom:50%;" /></p>
+<p>保存后,更新源:</p>
+<p><code>pacman -Syy</code></p>
+<h4 id="2-11-安装基本系统"><a href="#2-11-安装基本系统" class="headerlink" title="2.11 安装基本系统"></a>2.11 安装基本系统</h4><p>安装基本系统只需一条命令:</p>
+<p><code>pacstrap /mnt base base-devel</code></p>
+<p>此步需下载安装的组件较多,请耐心等待,若下载速度特别慢,请检查源配置文件中的国内源地址是否有误</p>
+<h4 id="2-12-生成挂载信息"><a href="#2-12-生成挂载信息" class="headerlink" title="2.12 生成挂载信息"></a>2.12 生成挂载信息</h4><p>此步将挂载信息写入系统文件中,以便系统重启后自动挂载分区,所以此步非常重要:</p>
+<p><code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</code></p>
+<p>检查挂载信息,若显示挂载信息则继续接下来的步骤,若挂载信息有误,请仔细检查前面挂载步骤是否有误:</p>
+<p>​        <img src="https://i.loli.net/2019/10/11/snp79RNrt486UG2.png" alt="挂载信息检查.png" style="zoom:50%;" /></p>
+<h4 id="2-13-切换系统"><a href="#2-13-切换系统" class="headerlink" title="2.13 切换系统"></a>2.13 切换系统</h4><p>目前我们仍处于启动盘中,需要切换到新安装的系统中操作:</p>
+<p><code>arch-chroot /mnt</code></p>
+<p>此命令非常有用,如后续系统出现问题无法启动,可插入启动盘挂载分区后切换系统进行修复</p>
+<p>切换成功,如图所示,#号前面的内容已发生变化:</p>
+<p>​        <img src="https://i.loli.net/2019/10/11/jxGcrTCiHyYREMI.png" alt="系统切换成功.png" style="zoom:50%;" /></p>
+<h4 id="2-14-设置时区"><a href="#2-14-设置时区" class="headerlink" title="2.14 设置时区"></a>2.14 设置时区</h4><p>时间不正确的情况下易引发问题,所以此步也是很有必要的:</p>
+<p><code>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</code></p>
+<p><code>hwclock --systohc</code></p>
+<h4 id="2-15-安装软件"><a href="#2-15-安装软件" class="headerlink" title="2.15 安装软件"></a>2.15 安装软件</h4><p>因为我们已经切换到了新系统中,新系统目前只包含一些基本组件,所以需要安装一些软件来帮助我们</p>
+<p><strong>ArchLinux</strong>使用<strong>pacman</strong>作为包管理器,利用<strong>pacman</strong>可以方便快捷地安装软件,如<strong>Vim</strong>:</p>
+<p><code>pacman -S vim</code></p>
+<p><strong>Vim</strong>是<strong>Linux</strong>下一个常用且高效的编辑器,熟练使用<strong>Vim</strong>可以更好地操作配置文件,以及更好地理解</p>
+<p><strong>Linux一切皆为文件</strong>的理念,帮助我们更好地使用<strong>Linux</strong>系统</p>
+<p>另外建议此处把无线网络组件安装好,以防没有有线网络的情况下进入系统无法连接无线网的尴尬情况:</p>
+<p><code>pacman -S wpa_supplicant dialog netctl wireless_tools</code></p>
+<p>开机后执行以下命令连接无线网络:</p>
+<p><code>sudo wifi-menu</code>    </p>
+<p>此命令可打开一个简易的无线网络连接图形界面,适合新手使用</p>
+<h4 id="2-16-设置语言选项"><a href="#2-16-设置语言选项" class="headerlink" title="2.16 设置语言选项"></a>2.16 设置语言选项</h4><p>编辑**/etc/locale.gen**文件:</p>
+<p><code>vim /etc/locale.gen</code></p>
+<p>在文件中找到<strong>zh_CN.UTF-8 UTF-8,zh_HK.UTF-8 UTF-8,zh_TW.UTF-8 UTF-8,en_US.UTF-8 UTF-8</strong>四个字段,        去掉行首的#号,保存退出:</p>
+<p>​        <img src="https://i.loli.net/2019/10/11/sYz67GcQEgCBhwn.png" alt="语言选项.png" style="zoom:50%;" /></p>
+<p>更新配置文件:</p>
+<p><code>locale-gen</code></p>
+<p>然后打开(不存在时会自行创建)<strong>/etc/locale.conf</strong>文件:</p>
+<p><code>vim /etc/locale.conf</code></p>
+<p>在文件第一行加入以下内容:</p>
+<p><strong>LANG = en_US.UTF-8</strong></p>
+<p>保存并退出</p>
+<h4 id="2-17-设置主机名"><a href="#2-17-设置主机名" class="headerlink" title="2.17 设置主机名"></a>2.17 设置主机名</h4><p>打开(不存在时会自行创建)<strong>/etc/hostname</strong>文件:</p>
+<p><code>vim /etc/hostname</code></p>
+<p>在第一行输入你想设置的主机名(如:<strong>ThinkPad</strong>)</p>
+<p>保存并退出</p>
+<p>编辑**/etc/hosts**文件:</p>
+<p><code>vim /etc/hosts</code></p>
+<p>做如下修改(将ThinkPad替换成你自己设置的主机名):</p>
+<p><code>127.0.0.1    localhost.localdomain    localhost</code></p>
+<p><code>::1          localhost.localdomain    localhost</code></p>
+<p><code>127.0.1.1   ThinkPad.localdomain       ThinkPad</code></p>
+<p>保存并退出</p>
+<h4 id="2-18-设置Root密码"><a href="#2-18-设置Root密码" class="headerlink" title="2.18 设置Root密码"></a>2.18 设置Root密码</h4><p><strong>Root</strong>是<strong>Linux</strong>中具有最高权限的用户,对<strong>Root</strong>用户的操作不当会造成安全问题</p>
+<p>所以应对<strong>Root</strong>用户设置一个密码</p>
+<p>执行以下命令:</p>
+<p><code>passwd</code></p>
+<p>然后按提示输入密码后确认就可以了</p>
+<h4 id="2-19-新建普通用户"><a href="#2-19-新建普通用户" class="headerlink" title="2.19 新建普通用户"></a>2.19 新建普通用户</h4><p>前面我们提到使用<strong>Root</strong>用户操作不当会造成安全问题,所以我们新建一个普通用户来进行日常操作</p>
+<p>新建一个普通用户,名字叫jack:</p>
+<p><code>useradd -m jack</code></p>
+<p>设置密码:</p>
+<p><code>passwd jack</code></p>
+<p>按照提示输入密码确认即可</p>
+<h4 id="2-20-安装grub并设置引导"><a href="#2-20-安装grub并设置引导" class="headerlink" title="2.20 安装grub并设置引导"></a>2.20 安装grub并设置引导</h4><p>引导程序非常重要,没有它我们将无法进入系统,此处以<strong>grub</strong>为例</p>
+<p>安装<strong>intel-ucode</strong>(非Intel处理器可忽略):</p>
+<p><code>pacman -S intel-ucode</code></p>
+<p>若电脑中还有其他系统,一定要安装<strong>os-prober</strong>:</p>
+<p><code>pacman -S os-prober</code></p>
+<p>安装<strong>grub</strong>:</p>
+<p><code>pacman -S grub</code></p>
+<p><strong>BIOS</strong>用户部署<strong>grub</strong>(此处的**/dev/sda<strong>为硬盘信息而不是类似于</strong>/dev/sda1**这样的分区信息):</p>
+<p><code>grub-install --target=i386-pc /dev/sda</code>    </p>
+<p><strong>UEFI</strong>用户需要先安装<strong>efibootmgr</strong>再部署<strong>grub</strong>:</p>
+<p><code>pacman -S efibootmgr</code></p>
+<p><code>grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=ArchLinux</code></p>
+<p>生成<strong>grub</strong>配置文件:</p>
+<p><code>grub-mkconfig -o /boot/grub/grub.cfg</code></p>
+<p>强烈建议检查<strong>grub</strong>配置文件,看看是否有各个系统的入口,以防无法进入系统:</p>
+<p><code>vim /boot/grub/grub.cfg</code>        </p>
+<p>检查末尾<strong>menuentry</strong>字段部分是否有系统入口,如下图:</p>
+<p>​        <img src="https://i.loli.net/2019/10/12/BVHN6gKZEJFs3bh.png" alt="grub配置文件.png" style="zoom:50%;" /></p>
+<p>若没有发现<strong>Linux</strong>系统入口,则重新部署<strong>Linux内核</strong>后,重新生成<strong>grub</strong>配置文件:</p>
+<p><code>pacman -S linux</code></p>
+<p><code>grub-mkconfig -o /boot/grub/grub.cfg</code></p>
+<p>若有<strong>Linux</strong>系统入口,无其他系统入口(电脑中存在其他系统情况下)</p>
+<p>重启进入<strong>ArchLinux</strong>后重新生成<strong>grub</strong>配置文件:</p>
+<p><code>grub-mkconfig -o /boot/grub/grub.cfg</code>    </p>
+<p>确认无误后,退出新系统,取消挂载,重启进入系统:</p>
+<p><code>exit</code></p>
+<p><code>umount /mnt/boot/efi</code></p>
+<p><code>umount /mnt</code></p>
+<p><code>reboot</code>    </p>
+<h3 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h3><p>至此,一个基本的<strong>ArchLinux</strong>系统就安装好了,<strong>ArchLinux</strong>以简洁为宗旨,所以基础版系统没有图形化桌面,需要自行安装,<strong>ArchLinux</strong>的安装对于没有接触过<strong>Linux</strong>系统的新手来说有一定的难度,但这样的安装过程可以让你更好地理解你的系统,这是一个拼图的过程,你需要什么和不需要什么都由你自己决定,这也是很多人喜欢<strong>ArchLinux</strong>的原因.</p>
+<p>最后,也是最重要的一点:<strong>勇于尝试!</strong></p>
+]]></content>
+      <categories>
+        <category>ArchLinux</category>
+      </categories>
+      <tags>
+        <tag>技术</tag>
+      </tags>
+  </entry>
+</search>
