@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="数据库设计之三范式数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。1. 第一范式(1NF)：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。 错误示例：    学生编号 学生姓名 联系方式    1001 张三 &amp;#x7a;&amp;#x73;&amp;#x40;&amp;#x67;&amp;#x6d;&amp;#97;&amp;#x69;&amp;#x6c;&amp;#46;&amp;#99;&amp;#111;&amp;#109">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库设计之三范式">
+<meta property="og:url" content="http://example.com/2021/10/31/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B9%8B%E4%B8%89%E8%8C%83%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Myblog">
+<meta property="og:description" content="数据库设计之三范式数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。1. 第一范式(1NF)：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。 错误示例：    学生编号 学生姓名 联系方式    1001 张三 &amp;#x7a;&amp;#x73;&amp;#x40;&amp;#x67;&amp;#x6d;&amp;#97;&amp;#x69;&amp;#x6c;&amp;#46;&amp;#99;&amp;#111;&amp;#109">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-10-31T12:07:33.868Z">
+<meta property="article:modified_time" content="2021-10-31T14:28:45.382Z">
+<meta property="article:author" content="布拉德皮蛋">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/10/31/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B9%8B%E4%B8%89%E8%8C%83%E5%BC%8F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>数据库设计之三范式 | Myblog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Myblog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Talk is cheap, show me the code.</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/10/31/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B9%8B%E4%B8%89%E8%8C%83%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/head.jpeg">
+      <meta itemprop="name" content="布拉德皮蛋">
+      <meta itemprop="description" content="布拉德皮蛋的个人博客">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Myblog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          数据库设计之三范式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-10-31 20:07:33 / 修改时间：22:28:45" itemprop="dateCreated datePublished" datetime="2021-10-31T20:07:33+08:00">2021-10-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/" itemprop="url" rel="index"><span itemprop="name">数据库设计</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/10/31/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B9%8B%E4%B8%89%E8%8C%83%E5%BC%8F/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/10/31/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B9%8B%E4%B8%89%E8%8C%83%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="数据库设计之三范式"><a href="#数据库设计之三范式" class="headerlink" title="数据库设计之三范式"></a>数据库设计之三范式</h1><h3 id="数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。"><a href="#数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。" class="headerlink" title="数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。"></a>数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。</h3><h4 id="1-第一范式-1NF-：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。"><a href="#1-第一范式-1NF-：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。" class="headerlink" title="1. 第一范式(1NF)：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。"></a>1. 第一范式(1NF)：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。</h4><ul>
+<li><p>错误示例：</p>
+<table>
+<thead>
+<tr>
+<th align="center">学生编号</th>
+<th align="center">学生姓名</th>
+<th align="center">联系方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1001</td>
+<td align="center">张三</td>
+<td align="center"><a href="mailto:&#x7a;&#x73;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#111;&#109;">&#x7a;&#x73;&#x40;&#x67;&#x6d;&#97;&#x69;&#x6c;&#46;&#99;&#111;&#109;</a>,13548302093</td>
+</tr>
+<tr>
+<td align="center">1002</td>
+<td align="center">李四</td>
+<td align="center"><a href="mailto:&#108;&#x73;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;">&#108;&#x73;&#64;&#103;&#x6d;&#x61;&#105;&#108;&#x2e;&#x63;&#111;&#x6d;</a>,15683934924</td>
+</tr>
+<tr>
+<td align="center">1001</td>
+<td align="center">王五</td>
+<td align="center"><a href="mailto:&#119;&#x77;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#109;">&#119;&#x77;&#x40;&#x67;&#109;&#x61;&#x69;&#108;&#46;&#99;&#x6f;&#109;</a>,13420932882</td>
+</tr>
+</tbody></table>
+<p>上表中没有设计主键，且联系方式字段非原子性，还可再分。<a id="more"></a></p>
+</li>
+<li><p>正确示例：</p>
+<table>
+<thead>
+<tr>
+<th align="center">学生编号（PK）</th>
+<th align="center">学生姓名</th>
+<th align="center">邮箱地址</th>
+<th align="center">联系电话</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1001</td>
+<td align="center">张三</td>
+<td align="center"><a href="mailto:&#x7a;&#x73;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#109;">&#x7a;&#x73;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#109;</a></td>
+<td align="center">13548302093</td>
+</tr>
+<tr>
+<td align="center">1002</td>
+<td align="center">李四</td>
+<td align="center"><a href="mailto:&#x6c;&#x73;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#109;">&#x6c;&#x73;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#109;</a></td>
+<td align="center">15683934924</td>
+</tr>
+<tr>
+<td align="center">1003</td>
+<td align="center">王五</td>
+<td align="center"><a href="mailto:&#x77;&#119;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x77;&#119;&#64;&#x67;&#x6d;&#x61;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;</a></td>
+<td align="center">13420932882</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="2-第二范式-2NF-：在第一范式的基础上，数据表中所有的非主键字段必须完全依赖主键，不能产生部分依赖。"><a href="#2-第二范式-2NF-：在第一范式的基础上，数据表中所有的非主键字段必须完全依赖主键，不能产生部分依赖。" class="headerlink" title="2. 第二范式(2NF)：在第一范式的基础上，数据表中所有的非主键字段必须完全依赖主键，不能产生部分依赖。"></a>2. 第二范式(2NF)：在第一范式的基础上，数据表中所有的非主键字段必须完全依赖主键，不能产生部分依赖。</h4><ul>
+<li><p>错误示例：</p>
+<table>
+<thead>
+<tr>
+<th align="center">学生编号（PK）</th>
+<th align="center">教师编号（PK）</th>
+<th align="center">学生姓名</th>
+<th align="center">教师姓名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1001</td>
+<td align="center">001</td>
+<td align="center">张三</td>
+<td align="center">王老师</td>
+</tr>
+<tr>
+<td align="center">1002</td>
+<td align="center">002</td>
+<td align="center">李四</td>
+<td align="center">赵老师</td>
+</tr>
+<tr>
+<td align="center">1003</td>
+<td align="center">001</td>
+<td align="center">王五</td>
+<td align="center">王老师</td>
+</tr>
+<tr>
+<td align="center">1001</td>
+<td align="center">003</td>
+<td align="center">张三</td>
+<td align="center">李老师</td>
+</tr>
+</tbody></table>
+<p>以上表虽然符合第一范式(1NF)，但是学生姓名和教师姓名两个字段产生了冗余，因为学生姓名只依赖学生编号这个主键而不依赖教师编号，同样的，教师姓名只依赖教师编号这个主键而不依赖学生编号，这就产生了部分依赖，故不符合第二范式(2NF)。</p>
+</li>
+<li><p>正确示例：</p>
+<p>学生表（t_student）：</p>
+<table>
+<thead>
+<tr>
+<th align="center">学生编号（PK）</th>
+<th align="center">学生姓名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1001</td>
+<td align="center">张三</td>
+</tr>
+<tr>
+<td align="center">1002</td>
+<td align="center">李四</td>
+</tr>
+<tr>
+<td align="center">1003</td>
+<td align="center">王五</td>
+</tr>
+</tbody></table>
+<p>教师表（t_teacher）：</p>
+<table>
+<thead>
+<tr>
+<th align="center">教师编号（PK）</th>
+<th align="center">教师姓名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">001</td>
+<td align="center">王老师</td>
+</tr>
+<tr>
+<td align="center">002</td>
+<td align="center">赵老师</td>
+</tr>
+<tr>
+<td align="center">003</td>
+<td align="center">李老师</td>
+</tr>
+</tbody></table>
+<p>学生教师关系表（t_student_teacher_relation）：</p>
+<table>
+<thead>
+<tr>
+<th align="center">id（PK）</th>
+<th align="center">学生编号（fk）</th>
+<th align="center">教师编号（FK）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">1001</td>
+<td align="center">001</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">1002</td>
+<td align="center">002</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">1003</td>
+<td align="center">001</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">1001</td>
+<td align="center">003</td>
+</tr>
+</tbody></table>
+<p>在多对多的关系中，我们可以利用中间表来存放两表间的关系，防止产生部分依赖（<strong>多对多？三张表，关系表有两外键</strong>）。</p>
+</li>
+</ul>
+<h4 id="3-第三范式-3NF-：在第二范式的基础上，数据表中的所有非主键字段直接依赖主键字段，不能产生传递依赖。"><a href="#3-第三范式-3NF-：在第二范式的基础上，数据表中的所有非主键字段直接依赖主键字段，不能产生传递依赖。" class="headerlink" title="3.  第三范式(3NF)：在第二范式的基础上，数据表中的所有非主键字段直接依赖主键字段，不能产生传递依赖。"></a>3.  第三范式(3NF)：在第二范式的基础上，数据表中的所有非主键字段直接依赖主键字段，不能产生传递依赖。</h4><ul>
+<li><p>错误示例：</p>
+<table>
+<thead>
+<tr>
+<th align="center">学生编号（PK）</th>
+<th align="center">学生姓名</th>
+<th align="center">班级编号</th>
+<th align="center">班级名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1001</td>
+<td align="center">张三</td>
+<td align="center">01</td>
+<td align="center">一年一班</td>
+</tr>
+<tr>
+<td align="center">1002</td>
+<td align="center">李四</td>
+<td align="center">02</td>
+<td align="center">一年二班</td>
+</tr>
+<tr>
+<td align="center">1003</td>
+<td align="center">王五</td>
+<td align="center">03</td>
+<td align="center">一年三班</td>
+</tr>
+<tr>
+<td align="center">1004</td>
+<td align="center">赵六</td>
+<td align="center">04</td>
+<td align="center">一年三班</td>
+</tr>
+</tbody></table>
+<p>上表符合第二范式(2NF)，但班级名称存在冗余，因为班级名称并不直接依赖于主键学生编号，而是依赖与班级编号，班级编号又依赖于学生编号，这就产生了传递依赖，故不符合第三范式(3NF)，解决方案是对此数据表进行拆分。</p>
+</li>
+<li><p>正确示例：</p>
+<p>学生信息表（t_student）:</p>
+<table>
+<thead>
+<tr>
+<th align="center">学生编号（PK）</th>
+<th align="center">学生姓名</th>
+<th align="center">班级编号（FK）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1001</td>
+<td align="center">张三</td>
+<td align="center">01</td>
+</tr>
+<tr>
+<td align="center">1002</td>
+<td align="center">李四</td>
+<td align="center">02</td>
+</tr>
+<tr>
+<td align="center">1003</td>
+<td align="center">王五</td>
+<td align="center">03</td>
+</tr>
+<tr>
+<td align="center">1004</td>
+<td align="center">赵六</td>
+<td align="center">04</td>
+</tr>
+</tbody></table>
+<p>班级信息表（t_class）:</p>
+<table>
+<thead>
+<tr>
+<th align="center">班级编号（PK）</th>
+<th align="center">班级名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">01</td>
+<td align="center">一年一班</td>
+</tr>
+<tr>
+<td align="center">02</td>
+<td align="center">一年二班</td>
+</tr>
+<tr>
+<td align="center">03</td>
+<td align="center">一年三班</td>
+</tr>
+<tr>
+<td align="center">04</td>
+<td align="center">一年四班</td>
+</tr>
+</tbody></table>
+<p>经过对原数据表的拆分，有效防止了传递依赖的产生（<strong>一对多？两张表，多的表加外键</strong>）。</p>
+</li>
+</ul>
+<h4 id="4-一对一关系的设计"><a href="#4-一对一关系的设计" class="headerlink" title="4. 一对一关系的设计"></a>4. 一对一关系的设计</h4><p>​    一对一关系设计有两种方法：主键共享、外键唯一</p>
+<ol>
+<li><p>主键共享：</p>
+<ul>
+<li><p>用户登录表（t_user_login）：</p>
+<table>
+<thead>
+<tr>
+<th align="center">id（PK）</th>
+<th align="center">用户名</th>
+<th align="center">密码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">zs</td>
+<td align="center">11111</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">ls</td>
+<td align="center">22222</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">ww</td>
+<td align="center">33333</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>用户信息表（t_user_detail）：</p>
+<table>
+<thead>
+<tr>
+<th align="center">id（PK+FK）</th>
+<th align="center">真实姓名</th>
+<th align="center">联系电话</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">张三</td>
+<td align="center">13548302093</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">李四</td>
+<td align="center">15683934924</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">王五</td>
+<td align="center">13420932882</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ol>
+<ol start="2">
+<li><p>外键唯一：</p>
+<ul>
+<li><p>用户登录表（t_user_login）：</p>
+<table>
+<thead>
+<tr>
+<th align="center">id（PK）</th>
+<th align="center">用户名</th>
+<th align="center">密码</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">zs</td>
+<td align="center">11111</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">ls</td>
+<td align="center">22222</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">ww</td>
+<td align="center">33333</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>用户信息表（t_user_detail）：</p>
+<table>
+<thead>
+<tr>
+<th align="center">id（PK）</th>
+<th align="center">真实姓名</th>
+<th align="center">联系电话</th>
+<th align="center">userid（FK+unique）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">张三</td>
+<td align="center">13548302093</td>
+<td align="center">1</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">李四</td>
+<td align="center">15683934924</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">王五</td>
+<td align="center">13420932882</td>
+<td align="center">3</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+</ol>
+<h4 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5. 注意事项"></a>5. 注意事项</h4><p>​    在实际的开发中，我们应该以满足客户的需求为主，不一定要严格按照三范式进行数据库设计，有时需要拿冗余换取执行速度。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/31/Java%E5%BC%80%E5%8F%91%E5%B0%8F%E5%B7%A5%E5%85%B7%E4%B9%8BLombok/" rel="prev" title="Java开发小工具之Lombok">
+      <i class="fa fa-chevron-left"></i> Java开发小工具之Lombok
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B9%8B%E4%B8%89%E8%8C%83%E5%BC%8F"><span class="nav-text">数据库设计之三范式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E8%8C%83%E5%BC%8F%E6%98%AF%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%BE%9D%E6%8D%AE%EF%BC%8C%E6%8C%89%E7%85%A7%E8%8C%83%E5%BC%8F%E8%AE%BE%E8%AE%A1%E6%95%B0%E6%8D%AE%E8%A1%A8%E5%8F%AF%E4%BB%A5%E5%87%8F%E5%B0%91%E6%95%B0%E6%8D%AE%E5%86%97%E4%BD%99%E3%80%82"><span class="nav-text">数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%AC%AC%E4%B8%80%E8%8C%83%E5%BC%8F-1NF-%EF%BC%9A%E4%BB%BB%E4%BD%95%E4%B8%80%E5%BC%A0%E6%95%B0%E6%8D%AE%E8%A1%A8%E9%83%BD%E5%BA%94%E8%AF%A5%E6%9C%89%E4%B8%BB%E9%94%AE%EF%BC%8C%E5%B9%B6%E4%B8%94%E8%A1%A8%E4%B8%AD%E7%9A%84%E6%AF%8F%E4%B8%80%E5%AD%97%E6%AE%B5%E9%83%BD%E4%B8%8D%E5%8F%AF%E5%86%8D%E5%88%86%EF%BC%8C%E4%BF%9D%E8%AF%81%E5%AD%97%E6%AE%B5%E7%9A%84%E5%8E%9F%E5%AD%90%E6%80%A7%E3%80%82"><span class="nav-text">1. 第一范式(1NF)：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E7%AC%AC%E4%BA%8C%E8%8C%83%E5%BC%8F-2NF-%EF%BC%9A%E5%9C%A8%E7%AC%AC%E4%B8%80%E8%8C%83%E5%BC%8F%E7%9A%84%E5%9F%BA%E7%A1%80%E4%B8%8A%EF%BC%8C%E6%95%B0%E6%8D%AE%E8%A1%A8%E4%B8%AD%E6%89%80%E6%9C%89%E7%9A%84%E9%9D%9E%E4%B8%BB%E9%94%AE%E5%AD%97%E6%AE%B5%E5%BF%85%E9%A1%BB%E5%AE%8C%E5%85%A8%E4%BE%9D%E8%B5%96%E4%B8%BB%E9%94%AE%EF%BC%8C%E4%B8%8D%E8%83%BD%E4%BA%A7%E7%94%9F%E9%83%A8%E5%88%86%E4%BE%9D%E8%B5%96%E3%80%82"><span class="nav-text">2. 第二范式(2NF)：在第一范式的基础上，数据表中所有的非主键字段必须完全依赖主键，不能产生部分依赖。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E7%AC%AC%E4%B8%89%E8%8C%83%E5%BC%8F-3NF-%EF%BC%9A%E5%9C%A8%E7%AC%AC%E4%BA%8C%E8%8C%83%E5%BC%8F%E7%9A%84%E5%9F%BA%E7%A1%80%E4%B8%8A%EF%BC%8C%E6%95%B0%E6%8D%AE%E8%A1%A8%E4%B8%AD%E7%9A%84%E6%89%80%E6%9C%89%E9%9D%9E%E4%B8%BB%E9%94%AE%E5%AD%97%E6%AE%B5%E7%9B%B4%E6%8E%A5%E4%BE%9D%E8%B5%96%E4%B8%BB%E9%94%AE%E5%AD%97%E6%AE%B5%EF%BC%8C%E4%B8%8D%E8%83%BD%E4%BA%A7%E7%94%9F%E4%BC%A0%E9%80%92%E4%BE%9D%E8%B5%96%E3%80%82"><span class="nav-text">3.  第三范式(3NF)：在第二范式的基础上，数据表中的所有非主键字段直接依赖主键字段，不能产生传递依赖。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E4%B8%80%E5%AF%B9%E4%B8%80%E5%85%B3%E7%B3%BB%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="nav-text">4. 一对一关系的设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">5. 注意事项</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="布拉德皮蛋"
+      src="/images/head.jpeg">
+  <p class="site-author-name" itemprop="name">布拉德皮蛋</p>
+  <div class="site-description" itemprop="description">布拉德皮蛋的个人博客</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/junbiaoLiu" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;junbiaoLiu" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:junbiao1123@gmail.com" title="E-Mail → mailto:junbiao1123@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">布拉德皮蛋</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+      <span class="post-meta-item-text">站点总字数：</span>
+    <span title="站点总字数">10k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span class="post-meta-item-text">站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">9 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : true,
+      appId      : 'cSdiHset7eBuN5uhGF30zOvS-gzGzoHsz',
+      appKey     : 'HEKdTdY24mostxFO7hKPLHWX',
+      placeholder: "请在此填写评论",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
