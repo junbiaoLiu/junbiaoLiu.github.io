@@ -21,12 +21,12 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="数据库设计之三范式数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。1. 第一范式(1NF)：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。 错误示例：    学生编号 学生姓名 联系方式    1001 张三 &amp;#x7a;&amp;#115;&amp;#64;&amp;#103;&amp;#x6d;&amp;#97;&amp;#105;&amp;#x6c;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#x6d">
+  <meta name="description" content="数据库设计之三范式数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。1. 第一范式(1NF)：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。 错误示例：    学生编号 学生姓名 联系方式    1001 张三 &amp;#122;&amp;#115;&amp;#x40;&amp;#x67;&amp;#x6d;&amp;#x61;&amp;#x69;&amp;#x6c;&amp;#46;&amp;#99;&amp;#x6f;&amp;#10">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库设计之三范式">
 <meta property="og:url" content="http://example.com/2022/10/13/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1%E4%B9%8B%E4%B8%89%E8%8C%83%E5%BC%8F/index.html">
 <meta property="og:site_name" content="Myblog">
-<meta property="og:description" content="数据库设计之三范式数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。1. 第一范式(1NF)：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。 错误示例：    学生编号 学生姓名 联系方式    1001 张三 &amp;#x7a;&amp;#115;&amp;#64;&amp;#103;&amp;#x6d;&amp;#97;&amp;#105;&amp;#x6c;&amp;#x2e;&amp;#99;&amp;#x6f;&amp;#x6d">
+<meta property="og:description" content="数据库设计之三范式数据库设计范式是数据库表设计的依据，按照范式设计数据表可以减少数据冗余。1. 第一范式(1NF)：任何一张数据表都应该有主键，并且表中的每一字段都不可再分，保证字段的原子性。 错误示例：    学生编号 学生姓名 联系方式    1001 张三 &amp;#122;&amp;#115;&amp;#x40;&amp;#x67;&amp;#x6d;&amp;#x61;&amp;#x69;&amp;#x6c;&amp;#46;&amp;#99;&amp;#x6f;&amp;#10">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-10-13T03:03:50.066Z">
 <meta property="article:modified_time" content="2021-10-31T14:28:46.000Z">
@@ -297,17 +297,17 @@
 <tbody><tr>
 <td align="center">1001</td>
 <td align="center">张三</td>
-<td align="center"><a href="mailto:&#x7a;&#115;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;">&#x7a;&#115;&#64;&#103;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#x6d;</a>,13548302093</td>
+<td align="center"><a href="mailto:&#122;&#115;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;">&#122;&#115;&#x40;&#x67;&#x6d;&#x61;&#x69;&#x6c;&#46;&#99;&#x6f;&#109;</a>,13548302093</td>
 </tr>
 <tr>
 <td align="center">1002</td>
 <td align="center">李四</td>
-<td align="center"><a href="mailto:&#108;&#115;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;">&#108;&#115;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#x63;&#111;&#x6d;</a>,15683934924</td>
+<td align="center"><a href="mailto:&#x6c;&#115;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;">&#x6c;&#115;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#111;&#x6d;</a>,15683934924</td>
 </tr>
 <tr>
 <td align="center">1001</td>
 <td align="center">王五</td>
-<td align="center"><a href="mailto:&#x77;&#119;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;">&#x77;&#119;&#x40;&#x67;&#x6d;&#97;&#105;&#x6c;&#x2e;&#99;&#x6f;&#109;</a>,13420932882</td>
+<td align="center"><a href="mailto:&#x77;&#119;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x77;&#119;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;</a>,13420932882</td>
 </tr>
 </tbody></table>
 <p>上表中没有设计主键，且联系方式字段非原子性，还可再分。<a id="more"></a></p>
@@ -325,19 +325,19 @@
 <tbody><tr>
 <td align="center">1001</td>
 <td align="center">张三</td>
-<td align="center"><a href="mailto:&#122;&#x73;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#122;&#x73;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;</a></td>
+<td align="center"><a href="mailto:&#x7a;&#115;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;">&#x7a;&#115;&#64;&#x67;&#x6d;&#97;&#105;&#108;&#x2e;&#99;&#x6f;&#x6d;</a></td>
 <td align="center">13548302093</td>
 </tr>
 <tr>
 <td align="center">1002</td>
 <td align="center">李四</td>
-<td align="center"><a href="mailto:&#x6c;&#x73;&#x40;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#109;">&#x6c;&#x73;&#x40;&#103;&#x6d;&#x61;&#x69;&#x6c;&#46;&#x63;&#111;&#109;</a></td>
+<td align="center"><a href="mailto:&#x6c;&#115;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#111;&#x6d;">&#x6c;&#115;&#x40;&#x67;&#x6d;&#97;&#x69;&#108;&#46;&#99;&#111;&#x6d;</a></td>
 <td align="center">15683934924</td>
 </tr>
 <tr>
 <td align="center">1003</td>
 <td align="center">王五</td>
-<td align="center"><a href="mailto:&#x77;&#x77;&#x40;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;">&#x77;&#x77;&#x40;&#x67;&#109;&#x61;&#105;&#108;&#46;&#x63;&#x6f;&#x6d;</a></td>
+<td align="center"><a href="mailto:&#119;&#119;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#111;&#x6d;">&#119;&#119;&#64;&#103;&#109;&#x61;&#x69;&#108;&#46;&#99;&#111;&#x6d;</a></td>
 <td align="center">13420932882</td>
 </tr>
 </tbody></table>
